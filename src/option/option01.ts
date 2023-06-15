@@ -30,7 +30,7 @@ const firstElementTimesTwo = pipe(
 console.log(firstElementTimesTwo)
 
 
-
+// good example by https://zanza00.gitbook.io/learn-fp-ts/option/comparison-with-vanilla-typescript
 function ComputeWithFpts(array: number[]): string {
     return pipe(
       A.head(array), // O.some(1)
@@ -46,3 +46,14 @@ function ComputeWithFpts(array: number[]): string {
   
   console.log(ComputeWithFpts([1]));
   console.log(ComputeWithFpts([0.2]));
+
+type Req = { cookies?: string[] };
+
+const req1: Req = {};
+
+const cookie1: string[] | undefined = req1 && req1.cookies;
+const cookie2: O.Option<string[]> = pipe(
+  O.fromNullable(req1),
+  O.chainNullableK(a => a.cookies)
+);
+console.log(cookie1,cookie2)
