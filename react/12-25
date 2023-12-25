@@ -1,0 +1,116 @@
+import React, { useCallback, useState } from "react";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-enterprise";
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+
+class DeltaIndicator {
+  eGui: HTMLSpanElement | undefined;
+  init(params: any) {
+    const element = document.createElement("span");
+    element.style.color = "black";
+    element.style.fontWeight = "bold";
+    element.appendChild(document.createTextNode(params.value));
+    this.eGui = element;
+  }
+  getGui() {
+    return this.eGui;
+  }
+}
+
+const test = (params: any) => {
+  console.log(params.api);
+  console.log(params.columnApi.getAllGridColumns());
+  console.log(params.node.rowIndex);
+
+  const colDef = params.colDef;
+  const column = params.column;
+  console.log(colDef);
+
+  // 获取列的索引
+  // const colIndex = params.columnApi.getColumnIndex(column);
+
+  return <></>;
+};
+function PriorityCellRenderer(props: any) {
+  const cellValue = props.valueFormatted ? props.valueFormatted : props.value;
+
+  const buttonClicked = () => {
+    alert(`${cellValue} medals won!`);
+  };
+
+  return (
+    <span>
+      <span>{cellValue}</span>&nbsp;
+      <button onClick={() => buttonClicked()}>Push For Total</button>
+    </span>
+  );
+}
+const MyGrid = () => {
+  const [gridApi, setGridApi] = useState(null);
+  const [gridColumnApi, setGridColumnApi] = useState(null);
+
+  //const dataContext = React.useContext(DataContext);
+
+  const [columnDefs, setColumnDefs] = useState([
+    {
+      field: "name",
+      width: 100,
+      headerName: "",
+      cellRenderer: DeltaIndicator,
+      cellStyle: function (params: any) {
+        return { backgroundColor: "#f8f8f8" };
+      },
+    },
+    { field: "1A", cellRenderer: test },
+    { field: "1B" },
+    { field: "1C" },
+    { field: "2C" },
+    { field: "2D" },
+    { field: "3C" },
+    { field: "3D" },
+    { field: "4C" },
+    { field: "4D" },
+  ]);
+
+  const a = {
+    backgroundColor: "black",
+  };
+
+  const [rowData, setRowDate] = useState<any>([]);
+
+  const onGridReady = (params: any) => {
+    console.log("hello");
+    setRowDate([
+      { name: "1A", "1A": 0, "1B": 1 },
+      { name: "1B", "1A": 0, "1B": 2 },
+    ]);
+    setGridApi(params.api);
+    setGridColumnApi(params.columnApi);
+  };
+
+  return (
+    <div style={{ width: "100%", height: "100vh" }}>
+      <div
+        id="myGrid"
+        style={{
+          height: "100%",
+          width: "100%",
+        }}
+        className="ag-theme-alpine"
+      >
+        <AgGridReact
+          defaultColDef={{
+            flex: 1,
+            minWidth: 100,
+          }}
+          columnDefs={columnDefs}
+          onGridReady={onGridReady}
+          rowData={rowData}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default MyGrid;
