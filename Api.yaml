@@ -1,0 +1,78 @@
+openapi: 3.0.0
+info:
+  title: File Operations API
+  version: 1.0.0
+paths:
+  /check-file-existence:
+    get:
+      summary: Check if a file exists
+      parameters:
+        - name: hostname
+          in: query
+          required: true
+          description: The name of the host
+          schema:
+            type: string
+        - name: filePath
+          in: query
+          required: true
+          description: The absolute path of the file
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                exists: true
+        '404':
+          description: File not found
+          content:
+            application/json:
+              example:
+                exists: false
+
+  /move-file:
+    post:
+      summary: Move a file from one host to another
+      parameters:
+        - name: sourceHost
+          in: query
+          required: true
+          description: The name of the source host
+          schema:
+            type: string
+        - name: destinationHost
+          in: query
+          required: true
+          description: The name of the destination host
+          schema:
+            type: string
+        - name: sourceFilePath
+          in: query
+          required: true
+          description: The absolute path of the file to be moved
+          schema:
+            type: string
+        - name: destinationFilePath
+          in: query
+          required: true
+          description: The destination path where the file will be moved
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful file move
+        '404':
+          description: Source file not found
+          content:
+            application/json:
+              example:
+                error: "Source file not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: "Internal server error"
