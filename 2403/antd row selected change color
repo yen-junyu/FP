@@ -1,0 +1,240 @@
+import React, { useCallback, useState } from "react";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-enterprise";
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import styled from "styled-components";
+import { Input, Table } from "antd";
+
+const StyledInput = styled(Input)`
+  width: 200px;
+  border-color: red;
+`;
+const StyledAgGridContainer = styled.div`
+  height: 300px;
+  width: 1000px;
+  .ag-header-cell {
+    background-color: #3498db; /* 设置背景色为蓝色 */
+  }
+`;
+
+const StyledTable = styled(Table)`
+  /* 新的样式规则 */
+  .ant-table-tbody .ant-table-row.ant-table-row-selected > .ant-table-cell {
+    background-color: transparent; /* 设置新的背景颜色 */
+  }
+`;
+
+class DeltaIndicator {
+  eGui: HTMLSpanElement | undefined;
+  init(params: any) {
+    const element = document.createElement("span");
+    element.style.color = "black";
+    element.style.fontWeight = "bold";
+    element.appendChild(document.createTextNode(params.value));
+    this.eGui = element;
+  }
+  getGui() {
+    return this.eGui;
+  }
+}
+
+const test = (params: any) => {
+  // console.log(params.api);
+  // console.log(params.columnApi.getAllGridColumns());
+  // console.log(params.node.rowIndex);
+
+  const colDef = params.colDef;
+  const column = params.column;
+  // console.log(colDef);
+
+  // 获取列的索引
+  // const colIndex = params.columnApi.getColumnIndex(column);
+
+  return <></>;
+};
+function PriorityCellRenderer(props: any) {
+  const cellValue = props.valueFormatted ? props.valueFormatted : props.value;
+
+  const buttonClicked = () => {
+    alert(`${cellValue} medals won!`);
+  };
+
+  return (
+    <span>
+      <span>{cellValue}</span>&nbsp;
+      <button onClick={() => buttonClicked()}>Push For Total</button>
+    </span>
+  );
+}
+const MyGrid = () => {
+  const [gridApi, setGridApi] = useState(null);
+  const [gridColumnApi, setGridColumnApi] = useState(null);
+
+  //const dataContext = React.useContext(DataContext);
+
+  const [columnDefs, setColumnDefs] = useState([
+    {
+      field: "name",
+      width: 100,
+      headerName: "",
+      cellRenderer: DeltaIndicator,
+      cellStyle: function (params: any) {
+        return { backgroundColor: "#f8f8f8" };
+      },
+    },
+    { field: "1A", cellRenderer: test },
+    { field: "1B" },
+    { field: "1C" },
+    { field: "2C" },
+    { field: "2D" },
+    { field: "3C" },
+    { field: "3D" },
+    { field: "4C" },
+    { field: "4D" },
+  ]);
+
+  const a = {
+    backgroundColor: "black",
+  };
+
+  const [rowData, setRowDate] = useState<any>([]);
+
+  const onGridReady = (params: any) => {
+    console.log("hello");
+    setRowDate([
+      { name: "1A", "1A": 0, "1B": 1 },
+      { name: "1B", "1A": 0, "1B": 2 },
+    ]);
+    setGridApi(params.api);
+    setGridColumnApi(params.columnApi);
+  };
+
+  const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
+
+  const onSelectChange = (selectedKeys: any) => {
+    console.log(selectedKeys);
+    setSelectedRowKeys(selectedKeys);
+  };
+
+  // 自定义行样式的函数
+  const getRowClassName = (record: any, index: any) => {
+    // 判断行是否被选中，应用相应的类名
+    console.log("hello");
+    console.log(
+      selectedRowKeys.includes(index as never) ? "selected-row-color" : ""
+    );
+    return "selected-row-color";
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  const dataSource = [
+    {
+      key: "1",
+      name: "John Doe",
+      age: 25,
+      address: "123 Main St",
+    },
+    {
+      key: "2",
+      name: "Jane Doe",
+      age: 30,
+      address: "456 Park Ave",
+    },
+  ];
+
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Age",
+      dataIndex: "age",
+      key: "age",
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+    },
+  ];
+  const handleRowClick = (record: any) => {
+    setSelectedRowKeys(record.key);
+  };
+  const rowClassName = (record: any) => {
+    console.log(record.age);
+    console.log(selectedRowKeys.indexOf(record.key) !== -1);
+    //console.log(selectedRowKeys.find(record.key));
+    //return selectedRowKeys.find(record.key) ? "selected-row" : "";
+    console.log(
+      selectedRowKeys.indexOf(record.key) !== -1 ? "selected-row" : ""
+    );
+    return selectedRowKeys.indexOf(record.key) !== -1 ? "selected-row" : "";
+  };
+
+  return (
+    <div style={{ width: "100%", height: "100vh" }}>
+      {/* <div
+        id="myGrid"
+        style={{
+          height: "100%",
+          width: "100%",
+        }}
+        className="ag-theme-alpine"
+      >
+        <AgGridReact
+          defaultColDef={{
+            flex: 1,
+            minWidth: 100,
+          }}
+          columnDefs={columnDefs}
+          onGridReady={onGridReady}
+          rowData={rowData}
+        />
+      </div> */}
+      {/* <StyledInput></StyledInput>
+      <StyledAgGridContainer>
+        <div
+          id="myGrid"
+          style={{
+            height: "100%",
+            width: "100%",
+          }}
+          className="ag-theme-alpine"
+        >
+          <AgGridReact
+            defaultColDef={{
+              flex: 1,
+              minWidth: 100,
+            }}
+            columnDefs={columnDefs}
+            onGridReady={onGridReady}
+            rowData={rowData}
+          />
+        </div>
+      </StyledAgGridContainer> */}
+      <StyledTable
+        dataSource={dataSource}
+        columns={columns}
+        // onRow={(record, rowIndex) => {
+        //   return {
+        //     onClick: (event) => {
+        //       console.log("hello");
+        //       handleRowClick(record);
+        //     },
+        //   };
+        // }}
+        rowClassName={rowClassName}
+        // rowClassName={getRowClassName} // 设置rowClassName属性为自定义函数
+        rowSelection={rowSelection} // 设置rowSelection属性
+      ></StyledTable>
+    </div>
+  );
+};
+
+export default MyGrid;
