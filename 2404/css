@@ -1,0 +1,45 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.selected-row{
+  background-color: yellow;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.box {
+  position: relative; /* 設置相對定位，以便後續絕對定位 */
+  flex: 1 0 auto;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.title, .value {
+  padding: 5px;
+  text-align: center; /* 文字置中 */
+  font-size: 16px; /* 字體大小 */
+  font-weight: bold; /* 粗體 */
+}
+
+.edit-icon {
+  position: absolute; /* 設置絕對定位 */
+  top: 5px; /* 與方塊上邊距的距離 */
+  right: 5px; /* 與方塊右邊距的距離 */
+  cursor: pointer; /* 鼠標指針類型 */
+  color: #1890ff; /* Edit 圖標的顏色 */
+}
