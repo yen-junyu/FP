@@ -1,0 +1,24 @@
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+RestTemplate restTemplate = new RestTemplate();
+String response = restTemplate.getForObject("http://example.com/api/data", String.class);
+
+// 将返回的 JSON 字符串解析为 JSONObject 对象
+JSONObject jsonObject = new JSONObject(response);
+
+// 获取 result 字段下的 paraList 数组
+JSONArray paraList = jsonObject.getJSONObject("result").getJSONArray("paraList");
+
+// 遍历 paraList 数组，查找 name 为 "ju" 的对象，并获取其 value 值
+String value = null;
+for (int i = 0; i < paraList.length(); i++) {
+    JSONObject para = paraList.getJSONObject(i);
+    String name = para.getString("name");
+    if ("ju".equals(name)) {
+        value = para.getString("value");
+        break;
+    }
+}
+
+System.out.println("Value for name 'ju': " + value);
