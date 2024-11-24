@@ -1,5 +1,9 @@
 # Getting Started with Create React App
 
+
+reference: https://chatgpt.com/share/67433eb2-d250-800f-bc6e-aa546525fe61
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
