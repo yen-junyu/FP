@@ -1,0 +1,3 @@
+{{- $values := deepCopy .Values -}}
+{{- $_ := set $values "component" "gui" -}}
+{{ include "common.deployment" (dict "Values" $values "Release" .Release) }}
