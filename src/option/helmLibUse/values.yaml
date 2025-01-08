@@ -1,0 +1,45 @@
+appName: my-app
+replicaCount: 2
+image:
+  repository: nginx
+  tag: "1.23"
+
+container:
+  port: 8080
+
+gui:
+  container:
+    port: 8080
+  readinessProbe:
+    path: /gui/ready
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  livenessProbe:
+    path: /gui/health
+    initialDelaySeconds: 5
+    periodSeconds: 15
+  env:
+    - name: ENVIRONMENT
+      value: production
+    - name: LOG_LEVEL
+      value: debug
+
+service:
+  readinessProbe:
+    path: /service/ready
+    initialDelaySeconds: 3
+    periodSeconds: 5
+  livenessProbe:
+    path: /service/health
+    initialDelaySeconds: 3
+    periodSeconds: 10
+
+agent:
+  readinessProbe:
+    path: /agent/ready
+    initialDelaySeconds: 4
+    periodSeconds: 8
+  livenessProbe:
+    path: /agent/health
+    initialDelaySeconds: 4
+    periodSeconds: 12
