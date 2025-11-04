@@ -1,0 +1,27 @@
+-- 建表
+CREATE TABLE workflow_task_attr_history (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    wfauid VARCHAR(255) NOT NULL COMMENT 'Workflow 唯一代號 (對應 workflow_main.wfauid)',
+    task_name VARCHAR(255) NOT NULL COMMENT '任務名稱 (對應 workflow_task.taskName)',
+    attr_name VARCHAR(255) NOT NULL COMMENT '屬性名稱 (對應原本的 task attr key)',
+    value TEXT COMMENT '當下屬性的值（task 出錯時的內容）',
+    status VARCHAR(50) NOT NULL COMMENT '狀態類型：錯誤 或 人工處理',
+    handled_by VARCHAR(255) NULL COMMENT '若為人工處理，紀錄使用者帳號',
+    comment TEXT COMMENT '手動處理說明或備註',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '建立時間',
+
+    -- 資料驗證條件（MariaDB 10.2.1+）
+    CONSTRAINT chk_status CHECK (status IN ('ERROR', 'MANUAL_HANDLE')),
+
+    -- 索引設計
+    INDEX idx_wf_task_attr_hist (wfauid, task_name, attr_name, status, created_at),
+    INDEX idx_created_at (created_at),
+    INDEX idx_wfauid (wfauid)
+) ENGINE=InnoDB 
+  DEFAULT CHARSET=utf8mb4 
+  COLLATE=utf8mb4_unicode_ci 
+  COMMENT='Workflow Task 屬性異常歷史紀錄';
+
+
+DELETE FROM workflow_task_attr_history
+WHERE created_at < NOW() - INTERVAL 90 DAY;
